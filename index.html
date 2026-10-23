@@ -153,6 +153,10 @@
             line-height: 1;
         }
 
+        .menu-toggle {
+    display: none;
+}
+
         /* HERO */
 
         .hero {
@@ -770,29 +774,128 @@
         /* MOBILNÍ ZÁKLAD – DETAILNĚ DOLADÍME PO PC */
 
         @media (max-width: 900px) {
-            .navbar {
-                height: auto;
-            }
+           .navbar {
+    height: 68px;
+}
 
-            .nav-container {
-                min-height: 85px;
-                flex-wrap: wrap;
-                justify-content: center;
-                padding: 12px 20px;
-            }
+.nav-container {
+    height: 68px;
+    min-height: 0;
+    padding: 0 18px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
 
-            .nav-links {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                margin: 10px 0 0;
-                gap: 20px;
-            }
+.logo {
+    display: none;
+}
 
-            .nav-book {
-                padding: 12px 18px;
-            }
+.nav-book {
+    order: 1;
+    padding: 9px 13px;
+    gap: 7px;
+    font-size: 11px;
+    letter-spacing: 0;
+}
+
+.nav-book .calendar-icon {
+    width: 19px;
+    height: 19px;
+}
+
+.nav-book .arrow {
+    font-size: 19px;
+}
+
+.nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    box-shadow: 0 12px 25px rgba(0,0,0,.08);
+
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height .35s ease, visibility .35s;
+}
+
+.nav-links.open {
+    max-height: 280px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    visibility: visible;
+}
+
+.nav-links a {
+    padding: 14px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #eee5df;
+}
+
+.nav-links a:last-child {
+    border-bottom: none;
+}
+
+.menu-toggle {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 10px 10px;
+    border: 0;
+    background: transparent;
+    color: #171316;
+    cursor: pointer;
+}
+
+.menu-text {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+}
+
+.menu-lines {
+    width: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.menu-lines span {
+    display: block;
+    height: 2px;
+    background: #171316;
+    transition: width .3s, transform .3s;
+}
+
+.menu-lines span:first-child {
+    width: 26px;
+}
+
+.menu-lines span:last-child {
+    width: 18px;
+}
+
+.menu-toggle.active .menu-lines span:first-child {
+    transform: translateY(4px) rotate(45deg);
+}
+
+.menu-toggle.active .menu-lines span:last-child {
+    width: 26px;
+    transform: translateY(-4px) rotate(-45deg);
+}
 
             .hero {
                 min-height: 560px;
@@ -847,10 +950,6 @@
             .logo img {
     width: min(280px, 75vw);
 }
-
-            .nav-book {
-                font-size: 12px;
-            }
 
             .hero-eyebrow {
                 font-size: 10px;
@@ -1040,7 +1139,7 @@
     <img src="logo.png" alt="Salon Synchro – Naděžda Kovalenko">
 </a>
 
-            <div class="nav-links">
+            <div class="nav-links" id="mobileNav">
     <a href="#domu">DOMŮ</a>
     <a href="#sluzby">SLUŽBY</a>
     <a href="#omne">O MNĚ</a>
@@ -1055,6 +1154,20 @@
                 OBJEDNAT SE
                 <span class="arrow">→</span>
             </a>
+
+            <button
+    class="menu-toggle"
+    type="button"
+    aria-label="Otevřít menu"
+    aria-expanded="false"
+    aria-controls="mobileNav"
+>
+    <span class="menu-text">MENU</span>
+    <span class="menu-lines" aria-hidden="true">
+        <span></span>
+        <span></span>
+    </span>
+</button>
 
         </nav>
     </header>
@@ -1351,6 +1464,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+    // MOBILNÍ MENU
+
+const menuToggle = document.querySelector(".menu-toggle");
+const mobileNav = document.querySelector(".nav-links");
+
+if (menuToggle && mobileNav) {
+
+    function closeMobileMenu() {
+        menuToggle.classList.remove("active");
+        mobileNav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Otevřít menu");
+    }
+
+    menuToggle.addEventListener("click", function () {
+        const isOpen = mobileNav.classList.toggle("open");
+
+        menuToggle.classList.toggle("active", isOpen);
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "Zavřít menu" : "Otevřít menu"
+        );
+    });
+
+    mobileNav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeMobileMenu);
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeMobileMenu();
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) closeMobileMenu();
+    });
+}
 </script>
 
 </body>
