@@ -157,6 +157,10 @@
     display: none;
 }
 
+        .mobile-leaf {
+    display: none;
+}
+
         /* HERO */
 
         .hero {
@@ -847,6 +851,21 @@
     border-bottom: none;
 }
 
+            .mobile-leaf {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    order: 0;
+    flex-shrink: 0;
+}
+
+.mobile-leaf img {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
 .menu-toggle {
     order: 2;
     display: flex;
@@ -1137,6 +1156,10 @@
 
             <a href="#domu" class="logo" aria-label="Salon Synchro – domů">
     <img src="logo.png" alt="Salon Synchro – Naděžda Kovalenko">
+</a>
+
+            <a href="#domu" class="mobile-leaf" aria-label="Salon Synchro – domů">
+    <img src="logo-listek.png" alt="">
 </a>
 
             <div class="nav-links" id="mobileNav">
